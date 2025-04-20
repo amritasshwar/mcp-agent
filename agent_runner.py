@@ -1,7 +1,6 @@
 import os
+from dotenv import load_dotenv
 import requests
-import sys
-from agent_mcp.langchain_mcp_adapter import LangchainMCPAdapter
 from langchain_core.tools import Tool
 from langchain_openai import ChatOpenAI
 from langchain.agents import AgentExecutor, create_tool_calling_agent
@@ -112,6 +111,7 @@ def suggest_edits(data):
     except Exception as e:
         return f"❌ Edit suggestion failed: {e}"
 
+
 # === LangChain Tools ===
 
 tools = [
@@ -157,16 +157,14 @@ prompt = ChatPromptTemplate.from_messages([
 
 llm = ChatOpenAI(model="gpt-4", temperature=0, api_key=openai_api_key)
 agent = create_tool_calling_agent(llm=llm, tools=tools, prompt=prompt)
-agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
-
-langchain_worker = LangChainMCPAdapter(
-    name="Influenxers",
-    description="Influenxers is an AI agent helping with influencer video marketing tasks.",
-    agent_executor=agent_executor,
-    langchain_agent=agent,
-    client_mode=True,
-    agent_type="langchain"
+agent_executor = AgentExecutor.from_agent_and_tools(
+    agent=agent,
+    tools=tools,
+    output_key="output",
+    verbose=True,
 )
+
+
 # === Public Interface for Discord ===
 
 def run_agent(task_text: str):
