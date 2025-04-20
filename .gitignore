@@ -1,0 +1,26 @@
+# Byte-compiled Python files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+mcp-env/
+venv/
+.venv/
+
+# Environment variables file
+.env
+
+# Editor directories and files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+
+# Log files
+*.log
+
+# Coverage reports
+htmlcov/
+.coverage
